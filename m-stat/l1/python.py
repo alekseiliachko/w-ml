@@ -55,7 +55,12 @@ def run2(N, data):
 	for x in range(0,n_steps):
 		result[x] = (real[x] / N) / estimated[x]
 
-	plt.plot(result, 'ro', color='blue')
+	filter = result < 1.3
+	result = result[filter]
+	filter = result > 0.6
+	result = result[filter]
+	# plt.plot(result, 'ro', color='blue')
+	plt.hist(result)
 	plt.show()
 
 	return 0;
@@ -80,6 +85,15 @@ def run3(N, data):
 		real[x] = (real[x] / N)
 
 	real = np.sort(real)
+	x = np.zeros(n_steps)
+
+	sum = 0
+	for i in range(1,n_steps):
+		x[i] = sum
+		sum += i/n_steps
+
+	# plt.plot(real, x, 'ro', color='blue')
+	# plt.show()
 
 	plt.plot(real, 'ro', color='blue')
 	plt.show()
@@ -89,10 +103,13 @@ def run3(N, data):
 
 
 TASK = int(sys.argv[1])
-N = int(str(sys.argv[2]))
-H = 1 / float( str(sys.argv[3]))
-data = np.random.rand(N)
+#N = int(str(sys.argv[2]))
+#H = 1 / float( str(sys.argv[3]))
+#data = np.random.rand(N)
 
+N = 10000
+H = 0.05
+data = np.random.rand(N)
 
 
 if (TASK == 1):
@@ -101,3 +118,6 @@ elif (TASK == 2):
     run2(N, data)
 elif (TASK == 3):
     run3(N, data)
+
+
+# сделать скрин или заменить гистограмму, добавить в отчет

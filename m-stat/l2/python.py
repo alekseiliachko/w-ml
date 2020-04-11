@@ -5,6 +5,23 @@ import matplotlib.pyplot as plt
 import sys
 import math
 
+
+
+
+# function gaussrand(MO, sko) {
+#   sum = 0;
+#   for (let i = 0; i < 28; i++)
+#     sum += 1.0 * rand() / RAND_MAX;
+#   return (sqrt(2.0) * (sko) * (sum - 14.)) / 2.11233 + MO;
+# }
+
+def gaussR(M0, sko):
+    s = 0
+    for i in range(0,28):
+        s = s + 1 * np.random.random() / 999999
+    return (math.sqrt(2) * sko * (s - 14)) / 2.11233 + M0
+
+
 def countMx(data):
     N = np.size(data)
     Mx = np.sum(data)/N
@@ -29,47 +46,128 @@ def fillRR(N, min, max):
     return array;
 
 def fillBR(N,p):
-    # def countC(n, p):
-    #     return math.factorial(n)/(math.factorial(p) * math.factorial(n-p));
-    def gaussR(N,p):
-        m = N * p
-        s = np.sqrt(N * p * (1.0 - p))
+    def _mx(N,p):
+        return(N*p);
+    def _d(N,p):
+        return(N*p*(1-p))
+    def _s(D):
+        return np.sqrt(D)
+    def gaussR(m,s):
         sum = 0
         for i in range(0,28):
             sum += 1.0 * np.random.rand() / 32767;
-        return (np.sqrt(2.0) * (s) * (sum - 14)) / 2.11233 + m;
-    array = np.zeros(N)
-    array[0] = (1 - p) ** N
-    for i in range(1,N-1):
-        if (i < 90):
-            array[i] = array[i -1] * ( ((N - i)/(i + 1))*(p/(1 - p)) )
+        return ( np.sqrt(2.0) * s + (sum - 14) / 2.11233 + m );
+    def RNNORM(n,p):
+        if (n > 100):
+            m = _mx(N,p)
+            d = _d(N,p)
+            s = _s(d)
+            return np.round(gaussR(  m, s ))
         else:
-            array[i] = np.round(gaussR(N,p) + 0.5)
+            temp = np.random.rand()
+            p_ = (1 - p) ** n
+            count = 0
+
+            while(temp - p_ >= 0):
+                temp = temp - p_
+                p_ = p_ * ( ((n - count)/(count + 1))*(p/(1 - p)) )
+                count += 1
+            return count
+
+    array = np.zeros(N);
+    for i in range(0,N-1):
+        array[i] = RNNORM(10,p)
     return array;
 
-def fillGR1():
+def fillGR1(N,p):
+    def IRNGEO1(p):
+        temp = np.random.rand()
+        p_ = p
+        count = 0
+        while(temp - p_):
+            temp = temp - p_
+            p_ = p_ * (1 - p_)
+            count += 1
+        return count;
 
-    return 0;
+    array = np.zeros(N);
+    for i in range(0,N-1):
+        array[i] = IRNGEO1(p)
+    return array;
 
-def fillGR2():
+def fillGR2(N,p):
+    def IRNGEO2(p):
+        temp = np.random.rand()
+        count = 0
+        while(temp > p):
+            temp = np.random.rand()
+            count+= 1
+        return count;
 
-    return 0;
+    array = np.zeros(N);
+    for i in range(0,N-1):
+        array[i] = IRNGEO2(p)
+    return array;
 
-def fillGR3():
+def fillGR3(N,p):
+    def IRNGEO3(p):
+        temp = np.random.rand()
+        return np.round(math.log(temp) / math.log(1 - p)) + 1;
+    array = np.zeros(N);
+    for i in range(0,N-1):
+        array[i] = IRNGEO3(p)
+    return array;
 
-    return 0;
+def fillPR1(N,mu):
+    def IRNPOI(mu):
+        if (mu < 88):
+            temp = np.random.random()
+            p_ = np.exp(-mu)
+            count = 1
+            while (temp - p_ >= 0):
+                temp -= p_
+                p_ *= mu / count
+                count+= 1
+            return temp;
+        else:
+            return gaussR(mu, mu);
+    array = np.zeros(N);
+    for i in range(0,N-1):
+        array[i] = IRNPOI(mu)
+    return array;
 
-def fillPR1():
+def fillPR2(N,mu):
+    def IRNPSN(mu):
+        if (mu < 88):
+            temp = np.random.rand();
+            p_ = temp;
+            count = 1;
+            while (p_ >= np.exp(-mu)):
+                temp = np.random.random()
+                p_ *= temp;
+                count+= 1;
+            return count;
+        else:
+            return gaussR(mu, mu);
+    array = np.zeros(N);
+    for i in range(0,N-1):
+        array[i] = IRNPSN(mu)
+    return array;
 
-    return 0;
-
-def fillPR2():
-
-    return 0;
-
-def fillLR():
-
-    return 0;
+def fillLR(N,mu):
+    def IRNLOG(q):
+        temp = np.random.rand();
+        p_ = -(1 * 1.0 / np.log(q)) * (1 - q);
+        count = 1;
+        while (temp - p_ >= 0):
+            temp -= p_;
+            p_ *= (count * 1.0 / (count + 1)) * (1 - q);
+            count+= 1
+        return count;
+    array = np.zeros(N);
+    for i in range(0,N-1):
+        array[i] = IRNLOG(mu)
+    return array;
 
 def countP(data):
     N = np.size(data)
@@ -104,32 +202,35 @@ def countI(data):
     real = np.sort(real)
     return real;
 
-
-
 TASK = int(sys.argv[1])
-N = int(str(sys.argv[2]))
-H = 1 / float( str(sys.argv[3]))
 
-# data = np.random.rand(N)
+N = 10000
+H = 0.5
 
 if (TASK == 1):
     data = fillRR(N,1,100)
-    # data = np.random.rand(N);
+    print(data)
 elif (TASK == 2):
     data = fillBR(N,0.5)
     print(data)
 elif (TASK == 3):
-    data = fillGR1()
+    data = fillGR1(N,0.5)
+    print(data)
 elif (TASK == 4):
-    data = fillGR2()
+    data = fillGR2(N,0.5)
+    print(data)
 elif (TASK == 5):
-    data = fillGR3()
+    data = fillGR3(N,0.5)
+    print(data)
 elif (TASK == 6):
-    data = fillPR1()
+    data = fillPR1(N,10)
+    print(data)
 elif (TASK == 7):
-    data = fillGR2()
-elif (TASK == 7):
-    data = fillLR()
+    data = fillGR2(N,10)
+    print(data)
+elif (TASK == 8):
+    data = fillLR(N,10)
+    print(data)
 
 print(countMx(data))
 print(countD(data))
@@ -138,3 +239,5 @@ plt.plot(countP(data), color='blue')
 plt.subplot(2, 1, 2)
 plt.plot(countI(data), 'ro', color='blue')
 plt.show()
+
+#отчет
