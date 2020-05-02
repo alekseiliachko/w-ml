@@ -5,29 +5,26 @@ import matplotlib.pyplot as plt
 import sys
 import math
 
+def countMx(data):
+    N = np.size(data)
+    Mx = np.sum(data)/N
+    return Mx;
 
-# function RNUNIF(b, a) {
-#   return (b - a) * Math.random() + a;
-# }
+def countD(data):
+    Mx = countMx(data)
+    N = np.size(data)
+    D = 0
+    for u in data:
+        D += (u - Mx) ** 2
+    D = D / N
+    return D;
 
 def RNUNIF(b, a):
     return (b - a) * np.random.random() + a;
 
-# function RNRFM1() {
-#   return Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
-# }
-
 
 def RNRFM1():
     return math.sqrt(-2 * math.log(np.random.random())) * math.cos(2 * math.pi * np.random.random());
-
-# function RNRFM2() {
-#   sum = 0.0
-#   for (let i = 0; i < 12; i++)
-#     sum += Math.random()
-#   return sum - 6
-# }
-
 
 
 def RNRFM2():
@@ -36,22 +33,9 @@ def RNRFM2():
         s += np.random.random()
     return s - 6;
 
-# function RNEXP(b) {
-#   return -b * Math.log(Math.random());
-# }
 
 def RNEXP(b):
     return -b * math.log(np.random.random());
-
-
-# function RNCHIS() {
-#   let sum = 0.0
-#   for (let i = 0; i < 10; i++) {
-#     let tmp = RNRFM1()
-#     sum += tmp ** 2
-#   }
-#   return sum
-# }
 
 
 def RNCHIS():
@@ -62,28 +46,9 @@ def RNCHIS():
     return s
 
 
-# function RNSTUD() {
-#   return RNRFM1() / Math.sqrt(RNCHIS() / 10);
-# }
-
-
 def RNSTUD():
     return RNRFM1() / math.sqrt(RNCHIS() / 10)
 
-
-# function createPlotnost(step, end, start, arr) {
-#   let x = start;
-#   while (x <= end - step) {
-#     let count = 0;
-#     for (let i = 0; i < 10000; i++) {
-#       if (arr[i] >= x && arr[i] < x + step) {
-#         count += 1;
-#       }
-#     }
-#     console.log(count / (10000 * step));
-#     x += step;
-#   }
-# }
 
 def plotn(step, end, begin, arr):
     x = begin
@@ -96,25 +61,13 @@ def plotn(step, end, begin, arr):
         x = x + step
         res.append(c / (N * step))
 
-    plt.plot(res, 'ro', color='blue')
+    x = np.linspace(0, 1, num=int((end-begin) / step))
+    plt.plot(x, res,  color='blue')
     plt.show()
     
     return 0;
 
 
-# function createIntegral(step, end, start, arr) {
-#   let x = start;
-#   let count = 0;
-
-#   while (x <= end - step) {
-#     for (let i = 0; i < 10000; i++) {
-#       if (arr[i] >= x && arr[i] < x + step)
-#         count += 1
-#     }
-#     console.log(count / 10000);
-#     x += step;
-#   }
-# }
 
 def integral(step, end, start, arr):
     x = start
@@ -127,7 +80,8 @@ def integral(step, end, start, arr):
         x = x + step
         res.append(c / N)
 
-    plt.plot(res, 'ro', color='blue')
+    x = np.linspace(0, 1, num=int((end-start)/ step))
+    plt.plot(x, res, 'ro', color='blue')
     plt.show()
     
     return 0;
@@ -137,6 +91,9 @@ def run1(k):
     arr = []
     for i in range(0,N):
         arr.append(RNUNIF(11, 1))
+
+    print(countMx(arr))
+    print(countD(arr))
 
     if (k == 1):
         plotn(1, 12, 0.0, arr)
@@ -149,6 +106,10 @@ def run2(k):
     for i in range(0,N):
         arr.append(RNRFM1())
 
+    print(countMx(arr))
+    print(countD(arr))
+    
+
     if (k == 1):
         plotn(0.5, 4, -4.0, arr)
     else:
@@ -159,6 +120,10 @@ def run3(k):
     arr = []
     for i in range(0,N):
         arr.append(RNRFM2())
+
+    print(countMx(arr))
+    print(countD(arr))
+    
     
     if (k == 1):
         plotn(0.5, 4, -4.0, arr)
@@ -171,6 +136,10 @@ def run4(k):
     for i in range(0,N):
         arr.append(RNEXP(5))
 
+    print(countMx(arr))
+    print(countD(arr))
+    
+
     if (k == 1):
         plotn(1, 50, 0.0, arr)
     else:
@@ -182,6 +151,10 @@ def run5(k):
     for i in range(0,N):
         arr.append(RNCHIS())
 
+    print(countMx(arr))
+    print(countD(arr))
+    
+
     if (k == 1):  
         plotn(1, 30, 0.0, arr)
     else:
@@ -192,6 +165,10 @@ def run6(k):
     arr = []
     for i in range(0,N):
         arr.append(RNSTUD())
+
+    print(countMx(arr))
+    print(countD(arr))
+    
 
     if (k == 1):
         plotn(0.5, 6, -6.0, arr)
@@ -219,69 +196,3 @@ elif (TASK == 5):
 elif (TASK == 6):
     run6(KEY)
 
-
-# let a = 3;
-# let N = 10000
-# let arr = []
-# if (a == 0) {
-#   for (let i = 0; i < N; i++) {
-#     arr.push(RNUNIF(11, 1))
-#   }
-#   createPlotnost(1, 12, 0.0, arr)
-#   console.log("***")
-#   createIntegral(1, 12, 0.0, arr)
-# }
-
-# if (a == 1) {
-#   for (let i = 0; i < N; i++) {
-#     arr.push(RNRFM1())
-#   }
-#   createPlotnost(0.5, 4, -4.0, arr)
-#   console.log("***")
-#   createIntegral(0.5, 4, -4.0, arr)
-# }
-
-# if (a == 2) {
-#   for (let i = 0; i < N; i++) {
-#     arr.push(RNRFM2());
-#   }
-#   createPlotnost(0.5, 4, -4.0, arr)
-#   console.log("***")
-#   createIntegral(0.5, 4, -4.0, arr)
-# }
-
-# if (a == 3) {
-#   for (let i = 0; i < N; i++) {
-#     arr.push(RNEXP(5))
-#   }
-#   createPlotnost(1, 50, 0.0, arr)
-#   console.log("***")
-#   createIntegral(1, 50, 0.0, arr)
-# }
-
-# if (a == 4) {
-#   for (let i = 0; i < N; i++)
-#     arr.push(RNCHIS())
-#   createPlotnost(1, 30, 0.0, arr)
-#   console.log("***")
-#   createIntegral(1, 30, 0.0, arr)
-# }
-
-# if (a == 5) {
-#   for (let i = 0; i < N; i++)
-#     arr.push(RNSTUD())
-#   createPlotnost(0.5, 6, -6.0, arr)
-#   console.log("***")
-#   createIntegral(0.5, 6, -6.0, arr)
-# }
-
-
-
-
-
-#  console.log(mean(arr))
-#  console.log(var(arr))
-
-
-
-#отчет

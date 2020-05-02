@@ -18,7 +18,7 @@ import math
 def gaussR(M0, sko):
     s = 0
     for i in range(0,28):
-        s = s + 1 * np.random.random() / 999999
+        s = s + 1 * np.random.random() / 25699
     return (math.sqrt(2) * sko * (s - 14)) / 2.11233 + M0
 
 
@@ -122,13 +122,13 @@ def fillPR1(N,mu):
     def IRNPOI(mu):
         if (mu < 88):
             temp = np.random.random()
-            p_ = np.exp(-mu)
+            p_ = math.exp(-mu)
             count = 1
             while (temp - p_ >= 0):
-                temp -= p_
-                p_ *= mu / count
-                count+= 1
-            return temp;
+                temp = temp - p_
+                p_ = p_ * mu / count
+                count = count + 1
+            return count;
         else:
             return gaussR(mu, mu);
     array = np.zeros(N);
@@ -144,8 +144,8 @@ def fillPR2(N,mu):
             count = 1;
             while (p_ >= np.exp(-mu)):
                 temp = np.random.random()
-                p_ *= temp;
-                count+= 1;
+                p_ = p_ * temp;
+                count= count + 1;
             return count;
         else:
             return gaussR(mu, mu);
@@ -160,9 +160,9 @@ def fillLR(N,mu):
         p_ = -(1 * 1.0 / np.log(q)) * (1 - q);
         count = 1;
         while (temp - p_ >= 0):
-            temp -= p_;
-            p_ *= (count * 1.0 / (count + 1)) * (1 - q);
-            count+= 1
+            temp = temp - p_
+            p_ = p_ * ((count * 1.0 / (count + 1)) * (1 - q))
+            count= count + 1
         return count;
     array = np.zeros(N);
     for i in range(0,N-1):
@@ -226,18 +226,25 @@ elif (TASK == 6):
     data = fillPR1(N,10)
     print(data)
 elif (TASK == 7):
-    data = fillGR2(N,10)
+    data = fillPR2(N,10)
     print(data)
 elif (TASK == 8):
-    data = fillLR(N,10)
+    data = fillLR(N,0.5)
     print(data)
 
 print(countMx(data))
 print(countD(data))
+
+
+min = np.min(data)
+max = np.max(data)
+n_steps = int(np.trunc( (max - min) / H))+1
+
 plt.subplot(2, 1, 1)
-plt.plot(countP(data), color='blue')
+x = np.linspace(0, 1, n_steps)
+plt.plot(x, countP(data)/20, color='blue')
 plt.subplot(2, 1, 2)
-plt.plot(countI(data), 'ro', color='blue')
+plt.plot(x, countI(data)/2, 'ro', color='blue')
 plt.show()
 
 #отчет

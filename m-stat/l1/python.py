@@ -28,6 +28,40 @@ def countK(N, data, Mx, D):
 		K.append(top / bot)
 	return K;
 
+def countP(data):
+    N = np.size(data)
+    min = np.min(data)
+    max = np.max(data)
+    n_steps = int(np.trunc( (max - min) / H))+1
+    estimated = np.full(n_steps,1/(n_steps))
+    real = np.zeros(n_steps)
+    result = real
+    for i in range(0,n_steps):
+        for x in range(0,N-1):
+            if ( (data[x] >= min + i * H) and (data[x] <= min + (i+1) * H) ):
+                real[i] += 1
+    for x in range(0,n_steps):
+        result[x] = (real[x] / N) / estimated[x]
+    return result;
+
+def countI(data):
+    N = np.size(data)
+    min = np.min(data)
+    max = np.max(data)
+    n_steps = int(np.trunc( (max - min) / H))+1
+    real = np.zeros(n_steps)
+    count = 0
+    for i in range(0,n_steps):
+        for x in range(0,N-1):
+            if ( (data[x] >= min + i * H) and (data[x] <= min + (i+1) * H) ):
+                count+= 1
+        real[i] = count
+    for x in range(0,n_steps):
+        real[x] = (real[x] / N)
+    real = np.sort(real)
+    return real;
+
+
 def run1(N, data):
 	mx = countMx(N, data)
 	d = countD(N, data,mx)
@@ -38,86 +72,33 @@ def run1(N, data):
 	plt.show()
 	return 0;
 
-def run2(N, data):
+def run2(N, data, h):
 
-	min = np.min(data)
-	max = np.max(data)
-	n_steps = int(np.trunc( (max - min) / H))+1
-	estimated = np.full(n_steps,1/(n_steps))
-	real = np.zeros(n_steps)
-	result = real
+    x = np.linspace(0, 1, num=int(1 / H))
+    plt.plot(x, countP(data), 'ro', color='blue')
+    plt.show()
 
-	for i in range(0,n_steps):
-		for x in range(0,N-1):
-			if ( (data[x] >= min + i * H) and (data[x] <= min + (i+1) * H) ):
-				real[i] += 1
+    return 0;
 
-	for x in range(0,n_steps):
-		result[x] = (real[x] / N) / estimated[x]
+def run3(N, data,h):
 
-	filter = result < 1.3
-	result = result[filter]
-	filter = result > 0.6
-	result = result[filter]
-	# plt.plot(result, 'ro', color='blue')
-	plt.hist(result)
-	plt.show()
-
-	return 0;
-
-def run3(N, data):
-
-	min = np.min(data)
-	max = np.max(data)
-	n_steps = int(np.trunc( (max - min) / H))+1
-
-	real = np.zeros(n_steps)
-
-	count = 0;
-
-	for i in range(0,n_steps):
-		for x in range(0,N-1):
-			if ( (data[x] >= min + i * H) and (data[x] <= min + (i+1) * H) ):
-				count+= 1
-		real[i] = count
-
-	for x in range(0,n_steps):
-		real[x] = (real[x] / N)
-
-	real = np.sort(real)
-	x = np.zeros(n_steps)
-
-	sum = 0
-	for i in range(1,n_steps):
-		x[i] = sum
-		sum += i/n_steps
-
-	# plt.plot(real, x, 'ro', color='blue')
-	# plt.show()
-
-	plt.plot(real, 'ro', color='blue')
-	plt.show()
-
-	return 0;
+    x = np.linspace(0, 1, num=int(1 / H))
+    plt.plot(x, countI(data), 'ro', color='blue')
+    plt.show()
+    return 0;
 
 
 
 TASK = int(sys.argv[1])
-#N = int(str(sys.argv[2]))
-#H = 1 / float( str(sys.argv[3]))
-#data = np.random.rand(N)
 
 N = 10000
-H = 0.05
+H = 0.001
 data = np.random.rand(N)
 
 
 if (TASK == 1):
     run1(N, data)
 elif (TASK == 2):
-    run2(N, data)
+    run2(N, data, H)
 elif (TASK == 3):
-    run3(N, data)
-
-
-# сделать скрин или заменить гистограмму, добавить в отчет
+    run3(N, data, H)
