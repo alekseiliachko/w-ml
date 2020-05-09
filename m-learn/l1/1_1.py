@@ -32,7 +32,7 @@ for line in datasetTicTacToe.readlines():
 
 datasetTicTacToe.close()
 
-allRatios = [0.1, 0.2, 0.3, 0.4, 0.5, 0.5, 0.6, 0.7, 0.8, 0.9]
+allRatios = [0.7, 0.725, 0.75, 0.775, 0.8, 0.825, 0.85, 0.875, 0.9]
 allResults = []
 
 for ratio in allRatios:

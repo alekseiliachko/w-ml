@@ -241,7 +241,7 @@ max = np.max(data)
 n_steps = int(np.trunc( (max - min) / H))+1
 
 plt.subplot(2, 1, 1)
-x = np.linspace(0, 1, n_steps)
+x = np.linspace(0, max, n_steps)
 plt.plot(x, countP(data)/20, color='blue')
 plt.subplot(2, 1, 2)
 plt.plot(x, countI(data)/2, 'ro', color='blue')

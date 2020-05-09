@@ -22,7 +22,7 @@ def getValuesReady(arr):
         coreY.append(line[-1])
     return (np.array(coreX).astype(np.float), np.array(coreY).astype(np.int))
 
-rofl = readFromFile("./nn_1.csv")
+rofl = readFromFile("data/nn_1.csv")
 (x, y) = getValuesReady(rofl)
 X0, X1 = x[:, 0], x[:, 1]
 
@@ -36,9 +36,7 @@ print(clf.n_iter_)
 print(clf.loss_)
 yPredicted = clf.predict(x)
 ax1.scatter(X0, X1, c=yPredicted)
-ax1.set_title("Predicted")
 ax2.scatter(X0, X1, c=y)
-ax2.set_title("Actual")
 print(metrics.accuracy_score(y, yPredicted))
 print(metrics.confusion_matrix(y, yPredicted))
 plt.show()
