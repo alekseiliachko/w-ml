@@ -16,7 +16,7 @@ translator = {
     "opel": 3
 }
 
-df = pd.read_csv("vehicle.csv")
+df = pd.read_csv("data/vehicle.csv")
 X = np.asarray(df.iloc[:, :-1])
 y = np.asarray(list(map(lambda x : translator[x], df.iloc[:, -1])))
 X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size = 0.1)

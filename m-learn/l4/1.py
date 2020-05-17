@@ -9,7 +9,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 
-df = pd.read_csv("glass.csv")
+df = pd.read_csv("data/glass.csv")
 X = np.asarray(df.iloc[:, :-1])
 y = np.asarray(df.iloc[:, -1])
 X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size = 0.1)

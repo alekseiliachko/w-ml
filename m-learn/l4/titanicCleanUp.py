@@ -14,7 +14,7 @@ translator = {
 sumAges = {}
 agesCounter = {}
 
-df = pd.read_csv("titanic_test.csv")
+df = pd.read_csv("data/titanic_test.csv")
 X = np.asarray(df.iloc[:, 1:])
 
 isTest = 1
@@ -53,7 +53,7 @@ for line in X:
         (line[:(2 - isTest)], line[(3-isTest):(5 - isTest)], [line[5 - isTest] + line[6 - isTest]], line[(8 - isTest):(9 - isTest)], line[(10 - isTest):]))
     allX.append(dataWeWant)
 
-with open('cleanupTest.csv', 'w', newline='') as csvfile:
+with open('data/cleanupTest.csv', 'w', newline='') as csvfile:
     fieldnames = ['"pclass"', '"sex"',
                   '"age"', '"family_size"', '"fare"', '"embarked"']
     csvfile.write(",".join(fieldnames) + '\n')
