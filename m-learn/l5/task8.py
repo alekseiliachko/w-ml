@@ -7,10 +7,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVR
 from sklearn.metrics import mean_squared_error
 
-df = pd.read_csv('svmdata6.txt', delim_whitespace=True)
+df = pd.read_csv('data/svmdata6.txt', delim_whitespace=True)
 x = np.array(df['X'].values).reshape(-1, 1)
 y = df['Y'].values
-eps_vals, rss_vals = np.linspace(0, 1.25, 6), []
+eps_vals, rss_vals = np.linspace(0, 1, 3), []
 for eps in eps_vals:
     reg = SVR(C=1, kernel='rbf', epsilon=eps, gamma='auto').fit(x, y)
     y_pred = reg.predict(x)

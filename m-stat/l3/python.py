@@ -19,25 +19,27 @@ def countD(data):
     D = D / N
     return D;
 
+
+                    # ОБЫЧНОЕ РАВНОМЕРНОЕ НЕПРЕРЫВНОЕ ПО ФОРМУЛЕ
 def RNUNIF(b, a):
     return (b - a) * np.random.random() + a;
 
-
+                    # БОКС МИЛЛЕР
 def RNRFM1():
     return math.sqrt(-2 * math.log(np.random.random())) * math.cos(2 * math.pi * np.random.random());
 
-
+                    # ЦЕНТРАЛЬНАЯ ПРЕДЕЛЬНАЯ ТЕОРЕМА  (N = 12)
 def RNRFM2():
     s = 0
     for i in range(0,12):
         s += np.random.random()
     return s - 6;
 
-
+                    # ЭКСПОНЕНЦИАЛЬНОЕ
 def RNEXP(b):
     return -b * math.log(np.random.random());
 
-
+                    # КСИ КВАДРАТ
 def RNCHIS():
     s = 0
     for i in range(0,10):
@@ -45,7 +47,7 @@ def RNCHIS():
         s += t ** 2
     return s
 
-
+                    # СТУДЕНТА
 def RNSTUD():
     return RNRFM1() / math.sqrt(RNCHIS() / 10)
 

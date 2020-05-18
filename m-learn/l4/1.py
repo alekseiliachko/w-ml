@@ -10,7 +10,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 
 df = pd.read_csv("data/glass.csv")
-X = np.asarray(df.iloc[:, :-1])
+X = np.asarray(df.iloc[:, 1:])
+X = X[:, :-1]
 y = np.asarray(df.iloc[:, -1])
 X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size = 0.1)
 
@@ -27,4 +28,3 @@ for classi, title in zip(classifiers, titles):
     plt.title(title)
     plt.plot(range(1,200, 20), acc)
     plt.show()
-

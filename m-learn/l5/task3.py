@@ -10,15 +10,15 @@ def get_data(file_path, delimiter):
     dataset = np.loadtxt(file_path, dtype=np.str, delimiter=delimiter)
     return dataset[1:, :]
 
-raw_data = get_data("cygage.txt", '\t')
+raw_data = get_data("data/cygage.txt", '\t')
 data = np.array(raw_data, dtype=np.float)
 regressor = LinearRegression()
 regressor.fit(np.reshape(data[:, 1], (len(data[:, 1]), 1)), data[:, 0], data[:, 2])
 x = np.reshape(data[:, 1], (len(data[:, 1]), 1))
 res = regressor.score(x, data[:, 0], data[:, 2])
-plot.plot(data[:, 1], data[:, 0], c='blue', label='Исходные данные')
+plot.plot(data[:, 1], data[:, 0])
 predicted = regressor.predict(x)
-plot.plot(data[:, 1], predicted, 'r', label='Регрессия')
+plot.plot(data[:, 1], predicted)
 print("score:", res)
 plot.legend()
 plot.show()

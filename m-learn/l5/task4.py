@@ -5,7 +5,7 @@ from sklearn import preprocessing, svm
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Ridge, LinearRegression
 
-inp_dataset = pd.read_csv('longley.csv')
+inp_dataset = pd.read_csv('data/longley.csv')
 inp_dataset = inp_dataset.drop('Population', 1)
 res = inp_dataset['Unemployed'].values
 data = inp_dataset.drop('Unemployed', 1).values
@@ -21,7 +21,7 @@ for i in range(26):
     train_err.append(1 - reg.score(data_train, res_train))
 
 plt.figure()
-plt.plot([10 ** (-3 + 0.2 * i) for i in range(26)], test_err, label='Test set')
-plt.plot([10 ** (-3 + 0.2 * i) for i in range(26)], train_err, label='Train set')
+plt.plot([10 ** (-3 + 0.2 * i) for i in range(26)], test_err, 'blue')
+plt.plot([10 ** (-3 + 0.2 * i) for i in range(26)], train_err, 'red')
 plt.legend()
 plt.show()

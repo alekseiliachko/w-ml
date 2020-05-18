@@ -17,11 +17,12 @@ def findBestFeatures(X, Y, print_all=False):
             if RSS < bestRSS:
                 bestRSS, bestFeatures = RSS, list(comb)
             if print_all:
-                print('combination = {}, RSS = {:.2f}'.format(comb, RSS))
+                # print('combination = {}, RSS = {:.2f}'.format(comb, RSS))
+                print(RSS)
     return bestFeatures
 
 
-inp_dataset = pd.read_csv('reglab.txt', delim_whitespace=True)
+inp_dataset = pd.read_csv('data/reglab.txt', delim_whitespace=True)
 x = np.array(inp_dataset.iloc[:, 1:].values)
 y = inp_dataset['y'].values
 best = findBestFeatures(x, y, print_all=True)

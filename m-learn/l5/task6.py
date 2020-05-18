@@ -7,7 +7,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
 
-data = pd.read_csv('JohnsonJohnson.csv')
+data = pd.read_csv('data/JohnsonJohnson.csv')
 data_q = [[] for _ in range(4)]
 for row in data.iterrows():
     if row[1][0].endswith("Q1"):
@@ -31,7 +31,7 @@ for i in range(len(x)):
     x[i] = x[i].replace(" Q4", '.75')
 x = np.array(x, dtype=np.float)
 x = np.reshape(x, (len(x), 1))
-plot.plot(x, data['value'], label='All')
+plot.plot(x, data['value'],'blue')
 regressors = [('regression', LinearRegression(), 'r--'),
               # ('svr', SVR(gamma='scale'), 'g--'),
               # ('random forest', RandomForestRegressor(n_estimators=100), 'r--')
@@ -40,7 +40,7 @@ regressors = [('regression', LinearRegression(), 'r--'),
 for regressor in regressors:
     regressor[1].fit(x, data['value'])
     predictions = regressor[1].predict(x)
-    plot.plot(x, predictions, label=regressor[0])
+    plot.plot(x, predictions, 'red')
     pred = regressor[1].predict([[2016.0], [2016.25], [2016.50], [2016.75]])
     print("{}: predictions for 2016 :{}\ttotal: {}".format(regressor[0], pred, sum(pred)))
 plot.legend()
@@ -52,10 +52,10 @@ for i, data_element in enumerate(data_q):
     results[i] = {}
     for regressor in regressors:
         x = np.reshape(data_element[:, 0], (len(data_element[:, 0]), 1))
-        plot.plot(x, data_element[:, 1], label='Q{}'.format(i + 1))
+        plot.plot(x, data_element[:, 1], 'blue')
         regressor[1].fit(x, data_element[:, 1])
         predictions = regressor[1].predict(x)
-        plot.plot(x, predictions, label="Q{}: {}".format(i + 1, regressor[0]))
+        plot.plot(x, predictions, 'red')
         pred = regressor[1].predict([[2016]])
         results[i][regressor[0]] = pred
     plot.legend()

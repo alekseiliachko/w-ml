@@ -20,7 +20,7 @@ def getValuesReady(arr):
         coreX.append(arr[:])
     return np.array(coreX).astype(np.float)
 
-f = open("reglab1.txt", "r")
+f = open("data/reglab1.txt", "r")
 f.readline()
 answ = f.readlines()
 f.close()
